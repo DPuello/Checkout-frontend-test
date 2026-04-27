@@ -9,6 +9,7 @@ export default function Checkout() {
 
   const [subtotal, setSubtotal] = useState(0);
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const IVA = 0.16;
 
   useEffect(() => {
@@ -18,6 +19,8 @@ export default function Checkout() {
       console.log(fetchedProducts);
       const calculatedSubtotal = fetchedProducts.reduce((total, product) => total + product.price, 0);
       setSubtotal(calculatedSubtotal);
+
+        setLoading(false);
     }
     fetchProducts();
   }, []);
@@ -141,8 +144,12 @@ export default function Checkout() {
               </div>
             </div>
 
-{
-              products.map((product) => (
+            {
+              loading ? <p>Cargando productos...</p>
+           
+             :
+             <>
+              {products.map((product) => (
             <article className="flex gap-2 justify-between">
               <div className="flex gap-2 items-center">
 
@@ -156,9 +163,7 @@ export default function Checkout() {
                 <p className="text-lg font-bold">${product.price.toFixed(2)}</p>
               </div>
             </article>
-              ))
-}
-
+            ))}
             <div className="border-t-1 border-gray-300 mt-4 pt-4 flex flex-col gap-2">
               <div className="flex justify-between text-gray-400">
                 <p>Subtotal</p>
@@ -176,6 +181,9 @@ export default function Checkout() {
                   <p>${(subtotal + subtotal * 0.16).toFixed(2)}</p>
                 </div>
             </div>
+              </>
+            }
+
 
           </section>
         </div>
